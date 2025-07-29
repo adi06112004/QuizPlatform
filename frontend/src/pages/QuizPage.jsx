@@ -1,4 +1,3 @@
-// File: src/pages/QuizPage.jsx
 import React, { useEffect, useState } from 'react';
 
 const QuizPage = () => {
@@ -37,7 +36,6 @@ const QuizPage = () => {
     });
     setScore(correct);
 
-    // Save score to backend
     if (user) {
       try {
         await fetch('http://localhost:5000/api/submit-score', {
@@ -59,9 +57,9 @@ const QuizPage = () => {
 
   if (!selectedQuiz) {
     return (
-      <div className="container mt-4">
-        <h4 className="mb-3">📝 Select a Quiz</h4>
-        <div className="d-flex flex-column">
+      <div className="container mt-5 text-center text-light">
+        <h2 className="mb-4 animate__animated animate__fadeInDown">🧠 Choose a Quiz to Begin</h2>
+        <div className="d-flex flex-column align-items-center">
           {quizzes.map((quiz, i) => (
             <button
               key={i}
@@ -70,9 +68,9 @@ const QuizPage = () => {
                 setScore(null);
                 setAnswers({});
               }}
-              className="btn btn-outline-primary mb-2"
+              className="btn btn-outline-warning mb-3 px-4 py-2 shadow-sm w-50"
             >
-              {quiz.title}
+              🚀 {quiz.title}
             </button>
           ))}
         </div>
@@ -81,38 +79,45 @@ const QuizPage = () => {
   }
 
   return (
-    <div className="container mt-4">
-      <h4 className="mb-4">{selectedQuiz.title}</h4>
+    <div className="container mt-4 text-light">
+      <h3 className="mb-4 text-center fw-bold border-bottom pb-2">{selectedQuiz.title}</h3>
 
       {selectedQuiz.questions.map((q, index) => (
-        <div key={index} className="mb-4">
-          <p><strong>Q{index + 1}:</strong> {q.question}</p>
-          {q.options.map((opt, i) => (
-            <div className="form-check" key={i}>
-              <input
-                className="form-check-input"
-                type="radio"
-                name={`q-${index}`}
-                id={`q-${index}-opt-${i}`}
-                value={opt}
-                checked={answers[index] === opt}
-                onChange={() => handleAnswerChange(index, opt)}
-              />
-              <label className="form-check-label" htmlFor={`q-${index}-opt-${i}`}>
-                {opt}
-              </label>
-            </div>
-          ))}
+        <div key={index} className="card bg-dark text-light mb-4 shadow-lg">
+          <div className="card-body">
+            <h5 className="card-title mb-3">Q{index + 1}. {q.question}</h5>
+            {q.options.map((opt, i) => (
+              <div className="form-check mb-2" key={i}>
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name={`q-${index}`}
+                  id={`q-${index}-opt-${i}`}
+                  value={opt}
+                  checked={answers[index] === opt}
+                  onChange={() => handleAnswerChange(index, opt)}
+                />
+                <label className="form-check-label" htmlFor={`q-${index}-opt-${i}`}>
+                  {opt}
+                </label>
+              </div>
+            ))}
+          </div>
         </div>
       ))}
 
-      <button onClick={submitQuiz} className="btn btn-success">
-        Submit Quiz
-      </button>
+      <div className="d-flex mb-4 justify-content-center">
+        <button onClick={submitQuiz} className="btn btn-success px-4 py-2 fw-semibold shadow">
+          ✅ Submit Quiz
+        </button>
+      </div>
 
       {score !== null && (
-        <div className="mt-4 alert alert-info">
-          ✅ <strong>Your Score:</strong> {score} / {selectedQuiz.questions.length}
+        <div className="alert alert-info mt-4 text-center animate__animated animate__fadeInUp">
+          <h5>🎯 <strong>Your Score:</strong> {score} / {selectedQuiz.questions.length}</h5>
+          <p className="mb-0">
+            {score === selectedQuiz.questions.length ? '💯 Perfect!' : score >= selectedQuiz.questions.length / 2 ? '👍 Good Job!' : '📖 Keep Practicing!'}
+          </p>
         </div>
       )}
     </div>
