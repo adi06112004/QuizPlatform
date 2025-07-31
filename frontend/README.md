@@ -1,12 +1,44 @@
-# React + Vite
+# 🧠 Quiz Platform – Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the **frontend application** for the Quiz Platform, developed using **React.js** and styled with **Bootstrap 5 (Dark Theme)**. It enables users to sign up, log in, participate in quizzes, and view results. Administrators can create quizzes and monitor user scores through a dedicated panel.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Live Demo
 
-## Expanding the ESLint configuration
+- **Frontend**: [https://your-frontend-url.vercel.app](https://your-frontend-url.vercel.app)  
+- **Backend API**: [https://quizplatformbackend.onrender.com](https://quizplatformbackend.onrender.com)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 🧰 Technologies Used
+
+- **React.js** – Frontend library
+- **React Router** – Client-side routing
+- **Bootstrap 5** – UI styling (Dark mode)
+- **Vercel** – Frontend deployment
+- **REST API** – Backend communication via HTTP
+
+---
+
+## ✅ Features
+
+- User registration and authentication
+- Secure login system with loading states
+- Quiz participation with dynamic questions
+- Admin panel to:
+  - Create new quizzes with options and answers
+  - View user scores in tabular format
+- Fully responsive and mobile-friendly UI
+- Dark mode styling for better user experience
+
+---
+
+## 🔧 Local Development
+
+To run the frontend locally:
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/quiz-frontend.git
+   cd quiz-frontend
