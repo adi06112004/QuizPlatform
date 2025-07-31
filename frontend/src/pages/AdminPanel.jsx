@@ -6,7 +6,27 @@ const AdminPanel = () => {
     { question: '', options: ['', '', '', ''], correctAnswer: '' }
   ]);
   const [users, setUsers] = useState([]);
-  const [submitting, setSubmitting] = useState(false); // New submitting state
+  const [quizzes, setQuizzes] = useState([]);
+  const [submitting, setSubmitting] = useState(false);
+
+  const fetchUsers = () => {
+    fetch('https://quizplatformbackend.onrender.com/api/users')
+      .then(res => res.json())
+      .then(data => setUsers(data))
+      .catch(err => console.error(err));
+  };
+
+  const fetchQuizzes = () => {
+    fetch('https://quizplatformbackend.onrender.com/api/quizzes')
+      .then(res => res.json())
+      .then(data => setQuizzes(data))
+      .catch(err => console.error(err));
+  };
+
+  useEffect(() => {
+    fetchUsers();
+    fetchQuizzes();
+  }, []);
 
   const addQuestion = () => {
     setQuestions(prev => [
@@ -43,6 +63,7 @@ const AdminPanel = () => {
       alert('✅ Quiz saved successfully!');
       setQuizTitle('');
       setQuestions([{ question: '', options: ['', '', '', ''], correctAnswer: '' }]);
+      fetchQuizzes(); // Refresh quizzes
     } catch (err) {
       console.error(err);
       alert('❌ Error saving quiz.');
@@ -51,12 +72,23 @@ const AdminPanel = () => {
     }
   };
 
-  useEffect(() => {
-    fetch('https://quizplatformbackend.onrender.com/api/users')
-      .then(res => res.json())
-      .then(data => setUsers(data))
-      .catch(err => console.error(err));
-  }, []);
+  const deleteQuiz = async (quizId) => {
+    const confirmDelete = window.confirm('Are you sure you want to delete this quiz?');
+    if (!confirmDelete) return;
+
+    try {
+      const res = await fetch(`https://quizplatformbackend.onrender.com/api/quizzes/${quizId}`, {
+        method: 'DELETE'
+      });
+
+      if (!res.ok) throw new Error('Failed to delete quiz');
+      alert('🗑️ Quiz deleted successfully!');
+      fetchQuizzes(); // Refresh list
+    } catch (err) {
+      console.error(err);
+      alert('❌ Error deleting quiz.');
+    }
+  };
 
   return (
     <div className="container py-4 bg-dark text-light min-vh-100">
@@ -77,14 +109,12 @@ const AdminPanel = () => {
           <div key={qIndex} className="card bg-secondary border-0 shadow-sm mb-4">
             <div className="card-body">
               <h5 className="card-title mb-3 text-light">📌 Question {qIndex + 1}</h5>
-
               <input
                 className="form-control mb-3 text-black border-light"
                 placeholder="Enter question"
                 value={q.question}
                 onChange={e => handleChange(qIndex, 'question', e.target.value)}
               />
-
               {q.options.map((opt, i) => (
                 <input
                   key={i}
@@ -94,7 +124,6 @@ const AdminPanel = () => {
                   onChange={e => handleOptionChange(qIndex, i, e.target.value)}
                 />
               ))}
-
               <input
                 className="form-control mt-3 text-black border-light"
                 placeholder="Correct Answer"
@@ -122,11 +151,29 @@ const AdminPanel = () => {
         </div>
       </div>
 
+      <div className="mb-5 p-4 rounded shadow border border-secondary">
+        <h4 className="mb-4 text-info">📚 All Quizzes</h4>
+        {quizzes.length > 0 ? (
+          quizzes.map(quiz => (
+            <div key={quiz._id} className="d-flex justify-content-between align-items-center bg-secondary text-dark p-3 mb-2 rounded shadow-sm">
+              <strong>{quiz.title}</strong>
+              <button
+                className="btn btn-sm btn-danger"
+                onClick={() => deleteQuiz(quiz._id)}
+              >
+                🗑️ Delete
+              </button>
+            </div>
+          ))
+        ) : (
+          <p className="text-muted">No quizzes found.</p>
+        )}
+      </div>
+
       <hr className="border-secondary" />
 
       <div className="p-4 rounded shadow border border-secondary">
         <h4 className="mb-4 text-warning">📊 User Scores</h4>
-
         <div className="table-responsive">
           <table className="table table-dark table-hover align-middle">
             <thead className="table-light text-dark">
