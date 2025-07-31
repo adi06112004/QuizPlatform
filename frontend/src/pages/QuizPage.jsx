@@ -6,6 +6,7 @@ const QuizPage = () => {
   const [answers, setAnswers] = useState({});
   const [score, setScore] = useState(null);
   const [user, setUser] = useState(null);
+  const [submitting, setSubmitting] = useState(false); // NEW state
 
   useEffect(() => {
     fetch('https://quizplatformbackend.onrender.com/api/quizzes')
@@ -22,6 +23,9 @@ const QuizPage = () => {
   };
 
   const submitQuiz = async () => {
+    if (submitting) return;
+    setSubmitting(true); // Prevent multiple clicks
+
     let correct = 0;
     selectedQuiz.questions.forEach((q, i) => {
       const userAns = answers[i];
@@ -34,6 +38,7 @@ const QuizPage = () => {
         correct++;
       }
     });
+
     setScore(correct);
 
     if (user) {
@@ -53,6 +58,8 @@ const QuizPage = () => {
         console.error('Error saving score:', err);
       }
     }
+
+    setSubmitting(false);
   };
 
   if (!selectedQuiz) {
@@ -96,6 +103,7 @@ const QuizPage = () => {
                   value={opt}
                   checked={answers[index] === opt}
                   onChange={() => handleAnswerChange(index, opt)}
+                  disabled={submitting}
                 />
                 <label className="form-check-label" htmlFor={`q-${index}-opt-${i}`}>
                   {opt}
@@ -107,8 +115,19 @@ const QuizPage = () => {
       ))}
 
       <div className="d-flex mb-4 justify-content-center">
-        <button onClick={submitQuiz} className="btn btn-success px-4 py-2 fw-semibold shadow">
-          ✅ Submit Quiz
+        <button
+          onClick={submitQuiz}
+          className="btn btn-success px-4 py-2 fw-semibold shadow"
+          disabled={submitting}
+        >
+          {submitting ? (
+            <>
+              <span className="spinner-border spinner-border-sm me-2" role="status" />
+              Submitting...
+            </>
+          ) : (
+            '✅ Submit Quiz'
+          )}
         </button>
       </div>
 
@@ -116,7 +135,11 @@ const QuizPage = () => {
         <div className="alert alert-info mt-4 text-center animate__animated animate__fadeInUp">
           <h5>🎯 <strong>Your Score:</strong> {score} / {selectedQuiz.questions.length}</h5>
           <p className="mb-0">
-            {score === selectedQuiz.questions.length ? '💯 Perfect!' : score >= selectedQuiz.questions.length / 2 ? '👍 Good Job!' : '📖 Keep Practicing!'}
+            {score === selectedQuiz.questions.length
+              ? '💯 Perfect!'
+              : score >= selectedQuiz.questions.length / 2
+              ? '👍 Good Job!'
+              : '📖 Keep Practicing!'}
           </p>
         </div>
       )}
