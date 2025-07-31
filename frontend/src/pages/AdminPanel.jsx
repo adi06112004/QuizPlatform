@@ -6,6 +6,7 @@ const AdminPanel = () => {
     { question: '', options: ['', '', '', ''], correctAnswer: '' }
   ]);
   const [users, setUsers] = useState([]);
+  const [submitting, setSubmitting] = useState(false); // New submitting state
 
   const addQuestion = () => {
     setQuestions(prev => [
@@ -28,6 +29,7 @@ const AdminPanel = () => {
 
   const submitQuiz = async () => {
     const newQuiz = { title: quizTitle, questions };
+    setSubmitting(true);
 
     try {
       const res = await fetch('https://quizplatformbackend.onrender.com/api/quizzes', {
@@ -44,6 +46,8 @@ const AdminPanel = () => {
     } catch (err) {
       console.error(err);
       alert('❌ Error saving quiz.');
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -102,11 +106,18 @@ const AdminPanel = () => {
         ))}
 
         <div className="d-flex gap-2">
-          <button className="btn btn-outline-light" onClick={addQuestion}>
+          <button className="btn btn-outline-light" onClick={addQuestion} disabled={submitting}>
             ➕ Add Question
           </button>
-          <button className="btn btn-success" onClick={submitQuiz}>
-            ✅ Submit Quiz
+          <button className="btn btn-success" onClick={submitQuiz} disabled={submitting}>
+            {submitting ? (
+              <>
+                <span className="spinner-border spinner-border-sm me-2" role="status" />
+                Submitting...
+              </>
+            ) : (
+              '✅ Submit Quiz'
+            )}
           </button>
         </div>
       </div>
