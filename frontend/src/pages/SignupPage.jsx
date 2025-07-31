@@ -17,7 +17,7 @@ const SignupPage = () => {
     setError(null);
 
     try {
-      const res = await fetch('http://localhost:5000/api/signup', {
+      const res = await fetch('https://quizplatformbackend.onrender.com/api/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, password })
