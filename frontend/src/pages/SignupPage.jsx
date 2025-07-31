@@ -13,6 +13,7 @@ const SignupPage = () => {
 
   const handleSignup = async (e) => {
     e.preventDefault();
+    if (loading) return; // prevent multiple clicks
     setLoading(true);
     setError(null);
 
@@ -45,6 +46,13 @@ const SignupPage = () => {
       className="d-flex justify-content-center align-items-center"
       style={{ minHeight: '100vh', backgroundColor: '#121212' }}
     >
+      {/* Optional fullscreen loading overlay */}
+      {loading && (
+        <div className="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-75 d-flex justify-content-center align-items-center z-3">
+          <div className="spinner-border text-info" role="status" />
+        </div>
+      )}
+
       <div
         className="card text-white shadow-lg px-4 py-5"
         style={{ backgroundColor: '#1e1e1e', maxWidth: '420px', width: '100%' }}
@@ -66,6 +74,7 @@ const SignupPage = () => {
               placeholder="Full Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
+              disabled={loading}
               required
             />
             <label htmlFor="floatingName" className="text-secondary">Full Name</label>
@@ -79,6 +88,7 @@ const SignupPage = () => {
               placeholder="name@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              disabled={loading}
               required
             />
             <label htmlFor="floatingEmail" className="text-secondary">Email address</label>
@@ -92,6 +102,7 @@ const SignupPage = () => {
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              disabled={loading}
               required
               minLength={6}
             />
@@ -102,6 +113,7 @@ const SignupPage = () => {
               className="btn btn-sm btn-outline-light position-absolute"
               style={{ top: '50%', right: '10px', transform: 'translateY(-50%)' }}
               onClick={() => setShowPassword(!showPassword)}
+              disabled={loading}
             >
               {showPassword ? 'Hide' : 'Show'}
             </button>
