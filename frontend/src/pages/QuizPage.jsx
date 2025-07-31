@@ -8,7 +8,7 @@ const QuizPage = () => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/quizzes')
+    fetch('https://quizplatformbackend.onrender.com/api/quizzes')
       .then(res => res.json())
       .then(data => setQuizzes(data))
       .catch(err => console.error(err));
@@ -38,7 +38,7 @@ const QuizPage = () => {
 
     if (user) {
       try {
-        await fetch('http://localhost:5000/api/submit-score', {
+        await fetch('https://quizplatformbackend.onrender.com/api/submit-score', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
