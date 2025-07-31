@@ -6,8 +6,7 @@ This is the **frontend application** for the Quiz Platform, developed using **Re
 
 ## 🚀 Live Demo
 
-- **Frontend**: [https://your-frontend-url.vercel.app](https://your-frontend-url.vercel.app)  
-- **Backend API**: [https://quizplatformbackend.onrender.com](https://quizplatformbackend.onrender.com)
+- **Frontend**: [https://quiz-platform-livid-psi.vercel.app/login](https://quiz-platform-livid-psi.vercel.app/login) 
 
 ---
 
